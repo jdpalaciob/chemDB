@@ -6,11 +6,9 @@ def non_null(*arg):
     """ filters the None (SQL NULL) arguments and cretes SQL column asociation"""
     result = []
     columns = ['name', 'chem_formula', 'cas_number', 'nature', 'ph_nature', 'quantity']
-    column_value_pair = dict(zip(columns, arg))
-    for pair in column_value_pair.items():
-        if pair[1] and pair[1] != '':
-            # result.extend(pair)
-            string = pair[0] + f"='{pair[1]}'"
+    for columns, value in zip(columns, arg):
+        if value and value != '':
+            string = columns + f"='{value}'"
             result.append(string)
     return ', '.join(result)
 

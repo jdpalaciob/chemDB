@@ -29,7 +29,7 @@ def stablish_connection(data_base, user_name=None, password=None):
     cur.execute(
         'CREATE TABLE IF NOT EXISTS reactives (\
             id SERIAL,\
-            chem_id VARCHAR(6) NOT NULL PRIMARY KEY,\
+            chem_id CHAR(7) NOT NULL PRIMARY KEY,\
             name VARCHAR(100) NOT NULL,\
             chem_form VARCHAR(20),\
             CAS_number CHAR(12) UNIQUE,\
@@ -57,7 +57,8 @@ def inserting_data(*, chem_id, name, chem_formula=None, cas_number=None, nature=
     cur.execute(
         "INSERT INTO reactives (\
         chem_id, name, chem_form, CAS_number, nature, ph_nature, Quantity)\
-        VALUES (%s,%s,%s,%s,%s,%s,%s);", (chem_id, name, chem_formula, cas_number, nature, ph_nature, quantity)
+        VALUES (%s,%s,%s,%s,%s,%s,%s);",
+        (chem_id, name, chem_formula, cas_number, nature, ph_nature, quantity)
         )
     conn.commit()
     conn.close()
@@ -84,6 +85,33 @@ def upgrade_data(*, chem_id, name=None, chem_formula=None, cas_number=None, natu
     conn.commit()
     conn.close()
 
+def view_data(*, view_field='*', column=None, condition_value=None,
+              data_base, user_name=None, password=None):
+    """ Allows the user to search for data """
+
+    conn = psql.connect(
+        dbname=data_base,
+        user=user_name,
+        password=password,
+        host='localhost',
+        port=5432
+        )
+    cur = conn.cursor()
+
+    if column and condition_value:
+
+        cur.execute(
+            f"SELECT {view_field} FROM reactives \
+            WHERE {column}='{condition_value}';"
+        )
+    else:
+        cur.execute(
+            f"SELECT {view_field} FROM reactives;"
+        )
+
+    data = cur.fetchall()
+    conn.close()
+    return data
 
 if __name__ == '__main__':
 
@@ -93,7 +121,7 @@ if __name__ == '__main__':
 
     stablish_connection(DB, USER, PASWRD)
 
-    CHEM_ID = 'MAN'
+    CHEM_ID = 'MAN-001'
     NAME = 'Hydrochloric Acid'
     FORMULA = 'HCl'
     CAS = '7647-10-0'
@@ -101,13 +129,24 @@ if __name__ == '__main__':
     PH = 'acid'
     QUANTITY = 12
 
-    inserting_data(chem_id = CHEM_ID, name=NAME, chem_formula=FORMULA, cas_number=CAS, nature=NATURE, ph_nature=PH, quantity=QUANTITY,
+    inserting_data(chem_id=CHEM_ID, name=NAME, chem_formula=FORMULA, cas_number=CAS, nature=NATURE, ph_nature=PH, quantity=QUANTITY,
                    data_base=DB, user_name=USER, password=PASWRD)
 
-    CHEM_ID = 'MAN'
+    CHEM_ID = 'MAN-001'
     NAME = 'chlorine'
     PH = 'gas'
     QUANTITY = 20
 
     upgrade_data(chem_id = CHEM_ID, name=NAME, quantity=QUANTITY,
-                   data_base=DB, user_name=USER, password=PASWRD)
+                 data_base=DB, user_name=USER, password=PASWRD)
+
+    VIEW = '*'
+    COLUMN = None
+    CONDITION = None
+    info = view_data(view_field=VIEW, column=COLUMN, condition_value=CONDITION,
+                     data_base=DB, user_name=USER, password=PASWRD)
+    for row in info:
+        for i in row:
+            print(i, end=' | ')
+        print()
+    print()

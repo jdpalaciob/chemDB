@@ -111,6 +111,27 @@ def view_data(*, view_field='*', column=None, condition_value=None,
     conn.close()
     return data
 
+def delete_data(*, chem_id=None, data_base, user_name=None, password=None):
+    """ Allows the user to delete a record. Ruled strictly by the reactive id """
+    
+    conn = psql.connect(
+        dbname=data_base,
+        user=user_name,
+        password=password,
+        host='localhost',
+        port=5432
+        )
+    cur = conn.cursor()
+
+    cur.execute(
+        f"DELETE FROM reactives \
+        WHERE chem_id='{chem_id}';"
+    )
+
+    conn.commit()
+    conn.close()
+
+
 if __name__ == '__main__':
 
     DB = 'chemDB'
@@ -148,3 +169,5 @@ if __name__ == '__main__':
             print(i, end=' | ')
         print()
     print()
+
+    delete_data(chem_id='MAN-001', data_base=DB, user_name=USER, password=PASWRD)

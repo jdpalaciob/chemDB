@@ -1,4 +1,5 @@
 .venvchemDB
 .vscode
+__pycache__
 .pylint.txt
 .commands.txt

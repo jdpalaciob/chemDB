@@ -14,10 +14,17 @@ response = requests.get(BASE_URL + 'chemDB')
 #                         "ph_nature":"acid",
 #                         "quantity":28}
 #                         )
-response = requests.post(BASE_URL + 'chemDB/insert', json={
+# response = requests.post(BASE_URL + 'chemDB/insert', json={
+#                         "chem_id":"MAN-002",
+#                         "name":"Sodium Hydroxide",
+#                         "nature":"INO",
+#                         "ph_nature":"base",
+#                         "quantity":25}
+#                         )
+
+response = requests.put(BASE_URL + 'chemDB/update', json={
                         "chem_id":"MAN-002",
-                        "name":"Sodium Hydroxide",
-                        "nature":"INO",
-                        "ph_nature":"base",
-                        "quantity":25}
+                        "chem_formula":"NaOH",
+                        "cas_number":"1310-73-2",
+                        "quantity":15}
                         )

@@ -3,14 +3,21 @@ import requests
 
 BASE_URL = 'http://127.0.0.1:5000/'
 
-# response = requests.get(BASE_URL + 'chemDB?db=chemDB&user=plant_chief&pword=plant123')
+response = requests.get(BASE_URL + 'chemDB')
 
+# response = requests.post(BASE_URL + 'chemDB/insert', json={
+#                         "chem_id":"CAC-001",
+#                         "name":"Sulfuric Acid",
+#                         "chem_formula":"H2SO4",
+#                         "cas_number":"7664-93-9",
+#                         "nature":"INO",
+#                         "ph_nature":"acid",
+#                         "quantity":28}
+#                         )
 response = requests.post(BASE_URL + 'chemDB/insert', json={
-                        "chem_id":"MAN-001",
-                        "name":"Hydrochloric Acid",
-                        "chem_formula":"HCl",
-                        "cas_number":"7647-01-0",
+                        "chem_id":"MAN-002",
+                        "name":"Sodium Hydroxide",
                         "nature":"INO",
-                        "ph_nature":"acid",
-                        "quantity":20}
+                        "ph_nature":"base",
+                        "quantity":25}
                         )

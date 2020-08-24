@@ -5,7 +5,7 @@ import psycopg2 as psql
 def non_null(*arg):
     """ filters the None (SQL NULL) arguments and cretes SQL column asociation"""
     result = []
-    columns = ['name', 'chem_formula', 'cas_number', 'nature', 'ph_nature', 'quantity']
+    columns = ['name', 'chem_form', 'cas_number', 'nature', 'ph_nature', 'quantity']
     for columns, value in zip(columns, arg):
         if value and value != '':
             string = columns + f"='{value}'"

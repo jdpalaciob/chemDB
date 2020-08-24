@@ -58,6 +58,18 @@ def update():
                     data_base=DB, user_name=USER, password=PASWRD)
     return Response(f'REACTIVE {req_body["chem_id"]} HAS BEEN UPDATED', status=200)
 
+@app.route('/chemDB/delete', methods=['DELETE'])
+def delete():
+    DB = credentials['data_base']
+    USER = credentials['user_name']
+    PASWRD = credentials['password']
+
+    req_body = request.get_json()
+    pdb.delete_data(
+                    chem_id=req_body.get('chem_id', None),
+                    data_base=DB, user_name=USER, password=PASWRD)
+    return Response(f'REACTIVE {req_body["chem_id"]} HAS BEEN DELETED', status=200)
+
 
 if __name__ == "__main__":
     app.debug = True

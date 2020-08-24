@@ -1,12 +1,9 @@
 """ Script to develop the API REST block of chemDB
-
-DB = 'chemDB'
-USER = 'plant_chief'
-PASWRD = 'plant123'
 """
 
-from flask import Flask, request
+from flask import Flask, request, Response
 import postgres_db as pdb
+from db_credentials import credentials
 
 app = Flask(__name__)
 
@@ -19,30 +16,30 @@ def homepage():
 
 @app.route('/chemDB')
 def connection():
-    DB = request.args.get('db')
-    USER = request.args.get('user')
-    PASWRD = request.args.get('pword')
+    DB = credentials['data_base']
+    USER = credentials['user_name']
+    PASWRD = credentials['password']
     pdb.stablish_connection(data_base=DB, user_name=USER, password=PASWRD)
-    return 'Access to Data Base granted'
+    return Response('Access to Data Base granted', status=500)
 
-@app.route('/chemDB/insert', methods=['GET','POST'])
+@app.route('/chemDB/insert', methods=['POST'])
 def insertion():
-    DB = request.args.get('db')
-    USER = request.args.get('user')
-    PASWRD = request.args.get('pword')
+    DB = credentials['data_base']
+    USER = credentials['user_name']
+    PASWRD = credentials['password']
 
-    chem_id = request.form['chem_id']
-    name = request.form['name']
-    chem_formula = request.form['chem_formula']
-    cas = request.form['cas_number']
-    nature = request.form['nature']
-    ph = request.form['ph_nature']
-    quantity = request.form['quantity']
+    req_body = request.get_json()
 
-    pdb.inserting_data(chem_id=chem_id, name=name, chem_formula=chem_formula, cas_number=cas, nature=nature, ph_nature=ph, quantity=quantity,
-                        data_base=DB, user_name=USER, password=PASWRD)
-    return f'REACTIVE {chem_id} HAS BEEN INSERTED'
-
+    pdb.inserting_data(
+                       chem_id=req_body['chem_id'],
+                       name=req_body['name'],
+                       chem_formula=req_body['chem_formula'],
+                       cas_number=req_body['cas_number'],
+                       nature=req_body['nature'],
+                       ph_nature=req_body['ph_nature'],
+                       quantity=req_body['quantity'],
+                       data_base=DB, user_name=USER, password=PASWRD)
+    return Response(f'REACTIVE {req_body["chem_id"]} HAS BEEN INSERTED', status=400)
 if __name__ == "__main__":
     app.debug = True
     app.run()

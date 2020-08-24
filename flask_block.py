@@ -7,13 +7,6 @@ from db_credentials import credentials
 
 app = Flask(__name__)
 
-@app.route('/')
-def homepage():
-    # parameters in the form ?key=value
-    name = request.args.get('name')
-    last = request.args.get('last')
-    return f'Hello {name} {last}'
-
 @app.route('/chemDB')
 def connection():
     DB = credentials['data_base']

@@ -70,6 +70,30 @@ def delete():
                     data_base=DB, user_name=USER, password=PASWRD)
     return Response(f'REACTIVE {req_body["chem_id"]} HAS BEEN DELETED', status=200)
 
+@app.route('/chemDB/info', methods=['GET'])
+def query():
+    DB = credentials['data_base']
+    USER = credentials['user_name']
+    PASWRD = credentials['password']
+
+    view = request.args.get('view')
+    column = request.args.get('where')
+    condition = request.args.get('equals')
+
+    data = pdb.view_data(
+                view_field=view, column=column, condition_value=condition,
+                data_base=DB, user_name=USER, password=PASWRD)
+
+    str_row = []
+    for row in data:
+        row = [str(i) for i in row]
+        string = ' | '.join(row)
+        str_row.append(string)
+    table = '\n'.join(str_row)
+
+    return Response(table, status=200)
+
+
 
 if __name__ == "__main__":
     app.debug = True

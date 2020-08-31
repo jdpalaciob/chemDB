@@ -2,5 +2,6 @@
 .vscode
 __pycache__
 .pylint.txt
-.commands.txt
+.git_1.txt
+.git_2.txt
 curl.txt

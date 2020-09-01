@@ -3,6 +3,7 @@
 
 from sqlalchemy import create_engine, Column, Integer, String, Sequence, Numeric
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 from db_credentials import credentials
 
 DB = credentials['data_base']
@@ -11,14 +12,13 @@ PASWRD = credentials['password']
 HOST = credentials['host']
 PORT = credentials['port']
 
-engine = create_engine(f'postgresql://{USER}:{PASWRD}@{HOST}:{PORT}/{DB}')
+engine = create_engine(f'postgresql://{USER}:{PASWRD}@{HOST}:{PORT}/{DB}', echo=False)
 
 Base = declarative_base()
 
 class Reactvie(Base):
     __tablename__ = 'reactives'
 
-    id = Column(Integer, Sequence('id'))
     chem_id = Column(String(7), primary_key=True)
     name = Column(String(100), nullable=False)
     chem_form = Column(String(20))
@@ -28,3 +28,18 @@ class Reactvie(Base):
     quantity = Column(Numeric(6, 2), default=0)
 
 Base.metadata.create_all(engine)
+
+if __name__ == '__main__':
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
+
+    # ADD
+    reactive_1 = Reactvie(chem_id='MAN-001',
+                          name='Hydrochloric Acid',
+                          chem_form='HCl',
+                          cas_number='7647-01-0',
+                          nature='INO',
+                          ph_nature='acid',
+                          quantity=12)
+    session.add(reactive_1)
+    session.commit()

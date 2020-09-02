@@ -29,9 +29,14 @@ class Reactvie(Base):
 
 Base.metadata.create_all(engine)
 
-if __name__ == '__main__':
+def insert_data(data, engine):
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
+
+    session.add(data)
+    session.commit()
+
+if __name__ == '__main__':
 
     # ADD
     reactive_1 = Reactvie(chem_id='MAN-001',
@@ -41,5 +46,4 @@ if __name__ == '__main__':
                           nature='INO',
                           ph_nature='acid',
                           quantity=12)
-    session.add(reactive_1)
-    session.commit()
+    insert_data(reactive_1, engine)

@@ -1,7 +1,7 @@
 """ Script to creates a DataBase with SQLAlchemy
 """
 
-from sqlalchemy import create_engine, Column, Integer, String, Sequence, Numeric
+from sqlalchemy import create_engine, Column, Integer, String, Sequence, Numeric, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from db_credentials import credentials
@@ -26,6 +26,10 @@ class Reactive(Base):
     nature = Column(String(3))
     ph_nature = Column(String(5))
     quantity = Column(Numeric(6, 2), default=0)
+
+    def __repr__(self):
+        expression = f"""chem_id={self.chem_id}, name={self.name}, cas_number={self.cas_number}, nature={self.nature}, ph_nature={self.ph_nature}, quantity={self.quantity}"""
+        return expression
 
 Base.metadata.create_all(engine)
 
@@ -71,6 +75,19 @@ def delete_data(chem_id, engine):
 
     session.commit()
 
+def query_data(*, view_field='*', column=None, condition=None, engine):
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
+
+    if column and condition:
+        txt = text(f"SELECT {view_field} FROM reactives \
+            WHERE {column} = '{condition}'")
+        result = session.query(Reactive).from_statement(txt).all()
+    else:
+        txt = text(f"SELECT {view_field} FROM reactives")
+        result = session.query(Reactive).from_statement(txt).all()
+    return result
+
 
 if __name__ == '__main__':
 
@@ -85,10 +102,17 @@ if __name__ == '__main__':
     # insert_data(reactive_1, engine)
     
     # UPDATE
-    reactive_2 = Reactive(cas_number='7664-93-9',
+    reactive_2 = Reactive(chem_id='CAC-001',
+                          name='Sulfuric Acid',
+                          chem_form='H2SO4',
+                          cas_number='7664-93-9',
                           nature='INO',
+                          ph_nature='acid',
                           quantity=28)
     # insert_data(reactive_2, engine)
     # update_data('CAC-001', reactive_2, engine)
 
-    delete_data('CAC-001', engine)
+    # delete_data('CAC-001', engine)
+
+    h = query_data(column='chem_form', condition='HCl', engine=engine)
+    print(h)

@@ -61,7 +61,16 @@ def update_data(chem_id, new_data, engine):
     else:
         # return f'The reactive with chem_id = {chem_id} is not registered'
         raise NameError(f'The reactive with chem_id = {chem_id} is not registered')
-    
+
+def delete_data(chem_id, engine):
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
+
+    chem = session.query(Reactive).filter_by(chem_id=chem_id).first()
+    session.delete(chem)
+
+    session.commit()
+
 
 if __name__ == '__main__':
 
@@ -81,3 +90,5 @@ if __name__ == '__main__':
                           quantity=28)
     # insert_data(reactive_2, engine)
     # update_data('CAC-001', reactive_2, engine)
+
+    delete_data('CAC-001', engine)

@@ -12,14 +12,14 @@ def non_null(*arg):
             result.append(string)
     return ', '.join(result)
 
-def stablish_connection(data_base, user_name=None, password=None):
+def stablish_connection(data_base, user_name=None, password=None, host=None):
     """ Stablish connection and creates table """
 
     conn = psql.connect(
         dbname=data_base,
         user=user_name,
         password=password,
-        host='localhost',
+        host=host,
         port=5432
         )
     cur = conn.cursor()
@@ -40,14 +40,14 @@ def stablish_connection(data_base, user_name=None, password=None):
     conn.close()
 
 def inserting_data(*, chem_id, name, chem_formula=None, cas_number=None, nature=None, ph_nature=None,
-                   quantity=None, data_base, user_name=None, password=None):
+                   quantity=None, data_base, user_name=None, password=None, host=None):
     """ Allows user to introduce records to the table in DB """
 
     conn = psql.connect(
         dbname=data_base,
         user=user_name,
         password=password,
-        host='localhost',
+        host= host,
         port=5432
         )
     cur = conn.cursor()
@@ -62,13 +62,13 @@ def inserting_data(*, chem_id, name, chem_formula=None, cas_number=None, nature=
     conn.close()
 
 def upgrade_data(*, chem_id, name=None, chem_formula=None, cas_number=None, nature=None, ph_nature=None,
-                   quantity=None, data_base, user_name=None, password=None):
+                   quantity=None, data_base, user_name=None, password=None, host=None):
     """ Allows the user to update some or all fields for a reactive """
     conn = psql.connect(
         dbname=data_base,
         user=user_name,
         password=password,
-        host='localhost',
+        host=host,
         port=5432
         )
     cur = conn.cursor()
@@ -84,14 +84,14 @@ def upgrade_data(*, chem_id, name=None, chem_formula=None, cas_number=None, natu
     conn.close()
 
 def view_data(*, view_field='*', column=None, condition_value=None,
-              data_base, user_name=None, password=None):
+              data_base, user_name=None, password=None, host=None):
     """ Allows the user to search for data """
 
     conn = psql.connect(
         dbname=data_base,
         user=user_name,
         password=password,
-        host='localhost',
+        host=host,
         port=5432
         )
     cur = conn.cursor()
@@ -111,14 +111,14 @@ def view_data(*, view_field='*', column=None, condition_value=None,
     conn.close()
     return data
 
-def delete_data(*, chem_id=None, data_base, user_name=None, password=None):
+def delete_data(*, chem_id=None, data_base, user_name=None, password=None, host=None):
     """ Allows the user to delete a record. Ruled strictly by the reactive id """
     
     conn = psql.connect(
         dbname=data_base,
         user=user_name,
         password=password,
-        host='localhost',
+        host=host,
         port=5432
         )
     cur = conn.cursor()
@@ -132,42 +132,3 @@ def delete_data(*, chem_id=None, data_base, user_name=None, password=None):
     conn.close()
 
 
-if __name__ == '__main__':
-
-    DB = 'chemDB'
-    USER = 'plant_chief'
-    PASWRD = 'plant123'
-
-    stablish_connection(DB, USER, PASWRD)
-
-    CHEM_ID = 'MAN-001'
-    NAME = 'Hydrochloric Acid'
-    FORMULA = 'HCl'
-    CAS = '7647-10-0'
-    NATURE = 'INO'
-    PH = 'acid'
-    QUANTITY = 12
-
-    inserting_data(chem_id=CHEM_ID, name=NAME, chem_formula=FORMULA, cas_number=CAS, nature=NATURE, ph_nature=PH, quantity=QUANTITY,
-                   data_base=DB, user_name=USER, password=PASWRD)
-
-    CHEM_ID = 'MAN-001'
-    NAME = 'chlorine'
-    PH = 'gas'
-    QUANTITY = 20
-
-    upgrade_data(chem_id = CHEM_ID, name=NAME, quantity=QUANTITY,
-                 data_base=DB, user_name=USER, password=PASWRD)
-
-    VIEW = '*'
-    COLUMN = None
-    CONDITION = None
-    info = view_data(view_field=VIEW, column=COLUMN, condition_value=CONDITION,
-                     data_base=DB, user_name=USER, password=PASWRD)
-    for row in info:
-        for i in row:
-            print(i, end=' | ')
-        print()
-    print()
-
-    delete_data(chem_id='MAN-001', data_base=DB, user_name=USER, password=PASWRD)

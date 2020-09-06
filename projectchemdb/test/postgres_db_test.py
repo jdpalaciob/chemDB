@@ -1,10 +1,6 @@
 from projectchemdb.persistence.postgres_db import stablish_connection, inserting_data, upgrade_data, delete_data, \
     view_data
-
-DB = 'python_chem_db'
-USER = 'postgres'
-PASWRD = 'postgres'
-HOST = 'database-2.cjdum0pi52ge.us-east-1.rds.amazonaws.com'
+from projectchemdb.test.configuration_test import DB, USER, PASWRD, HOST
 
 stablish_connection(DB, USER, PASWRD, HOST)
 

@@ -12,6 +12,7 @@ def non_null(*arg):
             result.append(string)
     return ', '.join(result)
 
+
 def stablish_connection(data_base, user_name=None, password=None, host=None):
     """ Stablish connection and creates table """
 
@@ -21,7 +22,7 @@ def stablish_connection(data_base, user_name=None, password=None, host=None):
         password=password,
         host=host,
         port=5432
-        )
+    )
     cur = conn.cursor()
 
     cur.execute(
@@ -35,9 +36,10 @@ def stablish_connection(data_base, user_name=None, password=None, host=None):
             ph_nature VARCHAR(5),\
             Quantity NUMERIC(6,2) DEFAULT 0\
             );'
-        )
+    )
     conn.commit()
     conn.close()
+
 
 def inserting_data(*, chem_id, name, chem_formula=None, cas_number=None, nature=None, ph_nature=None,
                    quantity=None, data_base, user_name=None, password=None, host=None):
@@ -47,9 +49,9 @@ def inserting_data(*, chem_id, name, chem_formula=None, cas_number=None, nature=
         dbname=data_base,
         user=user_name,
         password=password,
-        host= host,
+        host=host,
         port=5432
-        )
+    )
     cur = conn.cursor()
 
     cur.execute(
@@ -57,12 +59,13 @@ def inserting_data(*, chem_id, name, chem_formula=None, cas_number=None, nature=
         chem_id, name, chem_form, CAS_number, nature, ph_nature, Quantity)\
         VALUES (%s,%s,%s,%s,%s,%s,%s);",
         (chem_id, name, chem_formula, cas_number, nature, ph_nature, quantity)
-        )
+    )
     conn.commit()
     conn.close()
 
+
 def upgrade_data(*, chem_id, name=None, chem_formula=None, cas_number=None, nature=None, ph_nature=None,
-                   quantity=None, data_base, user_name=None, password=None, host=None):
+                 quantity=None, data_base, user_name=None, password=None, host=None):
     """ Allows the user to update some or all fields for a reactive """
     conn = psql.connect(
         dbname=data_base,
@@ -70,18 +73,19 @@ def upgrade_data(*, chem_id, name=None, chem_formula=None, cas_number=None, natu
         password=password,
         host=host,
         port=5432
-        )
+    )
     cur = conn.cursor()
 
     columns_modifier = non_null(name, chem_formula, cas_number, nature, ph_nature, quantity)
 
     cur.execute(
         "UPDATE reactives\
-        SET " +  columns_modifier +
+        SET " + columns_modifier +
         f" WHERE chem_id='{chem_id}';"
-        )
+    )
     conn.commit()
     conn.close()
+
 
 def view_data(*, view_field='*', column=None, condition_value=None,
               data_base, user_name=None, password=None, host=None):
@@ -93,7 +97,7 @@ def view_data(*, view_field='*', column=None, condition_value=None,
         password=password,
         host=host,
         port=5432
-        )
+    )
     cur = conn.cursor()
 
     if column and condition_value:
@@ -111,16 +115,17 @@ def view_data(*, view_field='*', column=None, condition_value=None,
     conn.close()
     return data
 
+
 def delete_data(*, chem_id=None, data_base, user_name=None, password=None, host=None):
     """ Allows the user to delete a record. Ruled strictly by the reactive id """
-    
+
     conn = psql.connect(
         dbname=data_base,
         user=user_name,
         password=password,
         host=host,
         port=5432
-        )
+    )
     cur = conn.cursor()
 
     cur.execute(
@@ -130,5 +135,3 @@ def delete_data(*, chem_id=None, data_base, user_name=None, password=None, host=
 
     conn.commit()
     conn.close()
-
-

@@ -78,7 +78,7 @@ def search_data(request):
     try:
         column = request.args.get('where')
         condition = request.args.get('equals')
-        message = alchemy.query_data(column=column, condition=condition, engine=engine)
+        message = str(alchemy.query_data(column=column, condition=condition, engine=engine))
         code_status = 200
         return message, code_status
     except Exception as ex:

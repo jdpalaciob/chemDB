@@ -2,5 +2,9 @@
    Cada capa tiene su función bien definida y puede depender de modulos o clases de otras capas.
 2. Se organizan las dependencias del proyecto para poder ser ejecutado e instalado con pipenv, esto depende del
    ambiente virtual de preferencia para trabajar.
-3. Se crea una clase main, que es la encargada de iniciar la aplicación.
-4. Se separa el código de los tests  del codigo del programa, se revisa ademas que los tests sigan ejecutando.
+3. Se crea una clase main, que es la encargada de iniciar la aplicación. Se refactoriza la clase flask_block para
+   ser ejecutado desde esta nueva clase main.
+4. Se separa el código de los tests  del código del programa, se revisa ademas que los tests sigan ejecutando.
+5. Se crea un archivo de configuración para guardar las credenciales de las bases de datos de test.
+6. Se quita de alchemy el código asociado a conectarse a la base de datos (crear el engine) y se dejan solo los métodos
+   y la creacion de la clase Reactive.

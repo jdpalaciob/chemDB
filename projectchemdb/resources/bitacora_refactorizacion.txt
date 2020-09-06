@@ -1,10 +1,19 @@
-1. Se modifica la estructura general del proyecto. Se crea un paquete por cada capa de abstracción de la aplicación.
-   Cada capa tiene su función bien definida y puede depender de modulos o clases de otras capas.
-2. Se organizan las dependencias del proyecto para poder ser ejecutado e instalado con pipenv, esto depende del
-   ambiente virtual de preferencia para trabajar.
-3. Se crea una clase main, que es la encargada de iniciar la aplicación. Se refactoriza la clase flask_block para
-   ser ejecutado desde esta nueva clase main.
-4. Se separa el código de los tests  del código del programa, se revisa ademas que los tests sigan ejecutando.
-5. Se crea un archivo de configuración para guardar las credenciales de las bases de datos de test.
-6. Se quita de alchemy el código asociado a conectarse a la base de datos (crear el engine) y se dejan solo los métodos
-   y la creacion de la clase Reactive.
+1.  Se modifica la estructura general del proyecto. Se crea un paquete por cada capa de abstracción de la aplicación.
+    Cada capa tiene su función bien definida y puede depender de modulos o clases de otras capas.
+2.  Se organizan las dependencias del proyecto para poder ser ejecutado e instalado con pipenv, esto depende del
+    ambiente virtual de preferencia para trabajar.
+3.  Se crea una clase main, que es la encargada de iniciar la aplicación. Se refactoriza la clase flask_block para
+    ser ejecutado desde esta nueva clase main.
+4.  Se separa el código de los tests  del código del programa, se revisa ademas que los tests sigan ejecutando.
+5.  Se crea un archivo de configuración para guardar las credenciales de las bases de datos de test.
+6.  Se quita de alchemy el código asociado a conectarse a la base de datos (crear el engine) y se dejan solo los métodos
+    y la creacion de la clase Reactive.
+7.  Se quita de la capa de los controller lo relacionado con el consumo de las bases de datos y se empieza a
+    consumir el service.
+8.  Se crea la capa de servicios, que sirve como puente entre la captura de informacion y el procesamiento en base de
+    datos. Se crea uno para cada tipo de consumo de la base de datos.
+9.  Separar las capas de abstracción le agrega flexibilidad al programa y permite incrementar funcionalidad sin
+    necesidad de modificar el codigo existente que ya se ha testeado. Para ver esto en accion se puede entrar al modulo
+    projectchemdb.controller.flask_block.py y cambiar en los import service_postgres por service_alchemy. El programa
+    ejecutara con cualquiera de los dos services sin necesidad de hacer cambios adicionales.
+10. Se mejora el control de errores en el consumo de la base de datos para ambos services.

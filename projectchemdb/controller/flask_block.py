@@ -13,7 +13,8 @@ def connection():
     DB = credentials['data_base']
     USER = credentials['user_name']
     PASWRD = credentials['password']
-    pdb.stablish_connection(data_base=DB, user_name=USER, password=PASWRD)
+    HOST = credentials['host']
+    pdb.stablish_connection(data_base=DB, user_name=USER, password=PASWRD, host=HOST)
     return Response('Access to Data Base granted', status=200)
 
 
@@ -22,6 +23,7 @@ def insertion():
     DB = credentials['data_base']
     USER = credentials['user_name']
     PASWRD = credentials['password']
+    HOST = credentials['host']
 
     req_body = request.get_json()
     pdb.inserting_data(
@@ -32,7 +34,7 @@ def insertion():
         nature=req_body.get('nature', None),
         ph_nature=req_body.get('ph_nature'),
         quantity=req_body.get('quantity', None),
-        data_base=DB, user_name=USER, password=PASWRD)
+        data_base=DB, user_name=USER, password=PASWRD, host=HOST)
     return Response(f'REACTIVE {req_body["chem_id"]} HAS BEEN INSERTED', status=200)
 
 
@@ -41,6 +43,7 @@ def update():
     DB = credentials['data_base']
     USER = credentials['user_name']
     PASWRD = credentials['password']
+    HOST = credentials['host']
 
     req_body = request.get_json()
     pdb.upgrade_data(
@@ -51,7 +54,7 @@ def update():
         nature=req_body.get('nature', None),
         ph_nature=req_body.get('ph_nature'),
         quantity=req_body.get('quantity', None),
-        data_base=DB, user_name=USER, password=PASWRD)
+        data_base=DB, user_name=USER, password=PASWRD, host=HOST)
     return Response(f'REACTIVE {req_body["chem_id"]} HAS BEEN UPDATED', status=200)
 
 
@@ -60,11 +63,12 @@ def delete():
     DB = credentials['data_base']
     USER = credentials['user_name']
     PASWRD = credentials['password']
+    HOST = credentials['host']
 
     req_body = request.get_json()
     pdb.delete_data(
         chem_id=req_body.get('chem_id', None),
-        data_base=DB, user_name=USER, password=PASWRD)
+        data_base=DB, user_name=USER, password=PASWRD, host=HOST)
     return Response(f'REACTIVE {req_body["chem_id"]} HAS BEEN DELETED', status=200)
 
 
@@ -73,6 +77,7 @@ def query():
     DB = credentials['data_base']
     USER = credentials['user_name']
     PASWRD = credentials['password']
+    HOST = credentials['host']
 
     view = request.args.get('view')
     column = request.args.get('where')
@@ -80,7 +85,7 @@ def query():
 
     data = pdb.view_data(
         view_field=view, column=column, condition_value=condition,
-        data_base=DB, user_name=USER, password=PASWRD)
+        data_base=DB, user_name=USER, password=PASWRD, host=HOST)
 
     str_row = []
     for row in data:

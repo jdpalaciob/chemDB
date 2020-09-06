@@ -261,3 +261,10 @@ dmypy.json
 .history
 
 # End of https://www.toptal.com/developers/gitignore/api/pycharm,visualstudiocode,python
+/.idea/.gitignore
+/.idea/chemDB.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/vcs.xml

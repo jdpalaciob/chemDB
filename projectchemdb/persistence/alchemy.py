@@ -26,17 +26,15 @@ class Reactive(Base):
 
 
 def insert_data(data, engine):
-    DBSession = sessionmaker(bind=engine)
-    session = DBSession()
-
+    db_session = sessionmaker(bind=engine)
+    session = db_session()
     session.add(data)
     session.commit()
 
 
 def update_data(chem_id, new_data, engine):
-    DBSession = sessionmaker(bind=engine)
-    session = DBSession()
-
+    db_session = sessionmaker(bind=engine)
+    session = db_session()
     chem = session.query(Reactive).filter_by(chem_id=chem_id).first()
 
     if chem:
@@ -52,27 +50,22 @@ def update_data(chem_id, new_data, engine):
             chem.ph_nature = new_data.ph_nature
         if new_data.quantity:
             chem.quantity = new_data.quantity
-
         return session.commit()
-        # return f'The reactvie with chem_id = {chem_id} has been updated'
     else:
-        # return f'The reactive with chem_id = {chem_id} is not registered'
         raise NameError(f'The reactive with chem_id = {chem_id} is not registered')
 
 
 def delete_data(chem_id, engine):
-    DBSession = sessionmaker(bind=engine)
-    session = DBSession()
-
+    db_session = sessionmaker(bind=engine)
+    session = db_session()
     chem = session.query(Reactive).filter_by(chem_id=chem_id).first()
     session.delete(chem)
-
     session.commit()
 
 
 def query_data(*, view_field='*', column=None, condition=None, engine):
-    DBSession = sessionmaker(bind=engine)
-    session = DBSession()
+    db_session = sessionmaker(bind=engine)
+    session = db_session()
 
     if column and condition:
         txt = text(f"SELECT {view_field} FROM reactives \

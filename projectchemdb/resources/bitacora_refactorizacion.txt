@@ -1,0 +1,6 @@
+1. Se modifica la estructura general del proyecto. Se crea un paquete por cada capa de abstracción de la aplicación.
+   Cada capa tiene su función bien definida y puede depender de modulos o clases de otras capas.
+2. Se organizan las dependencias del proyecto para poder ser ejecutado e instalado con pipenv, esto depende del
+   ambiente virtual de preferencia para trabajar.
+3. Se crea una clase main, que es la encargada de iniciar la aplicación.
+4. Se separa el código de los tests  del codigo del programa, se revisa ademas que los tests sigan ejecutando.

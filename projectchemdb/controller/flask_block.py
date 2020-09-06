@@ -2,99 +2,42 @@
 """
 
 from flask import Flask, request, Response
-from projectchemdb.persistence import postgres_db as pdb
-from projectchemdb.configuration.db_credentials import credentials
+from projectchemdb.service import service_postgres as service_db
 
 app = Flask(__name__)
 
 
-@app.route('/chemDB')
+@app.route('/status')
 def connection():
-    DB = credentials['data_base']
-    USER = credentials['user_name']
-    PASWRD = credentials['password']
-    HOST = credentials['host']
-    pdb.stablish_connection(data_base=DB, user_name=USER, password=PASWRD, host=HOST)
-    return Response('Access to Data Base granted', status=200)
+    message, code_status = service_db.check_data_base_status()
+    return Response(message, status=code_status)
 
 
-@app.route('/chemDB/insert', methods=['POST'])
+@app.route('/reactive', methods=['POST'])
 def insertion():
-    DB = credentials['data_base']
-    USER = credentials['user_name']
-    PASWRD = credentials['password']
-    HOST = credentials['host']
-
-    req_body = request.get_json()
-    pdb.inserting_data(
-        chem_id=req_body.get('chem_id', None),
-        name=req_body.get('name', None),
-        chem_formula=req_body.get('chem_formula', None),
-        cas_number=req_body.get('cas_number', None),
-        nature=req_body.get('nature', None),
-        ph_nature=req_body.get('ph_nature'),
-        quantity=req_body.get('quantity', None),
-        data_base=DB, user_name=USER, password=PASWRD, host=HOST)
-    return Response(f'REACTIVE {req_body["chem_id"]} HAS BEEN INSERTED', status=200)
+    request_body = request.get_json()
+    response_message, code_status = service_db.insert_data(request_body)
+    return Response(response_message, status=code_status)
 
 
-@app.route('/chemDB/update', methods=['PUT'])
+@app.route('/reactive', methods=['PUT'])
 def update():
-    DB = credentials['data_base']
-    USER = credentials['user_name']
-    PASWRD = credentials['password']
-    HOST = credentials['host']
-
-    req_body = request.get_json()
-    pdb.upgrade_data(
-        chem_id=req_body.get('chem_id', None),
-        name=req_body.get('name', None),
-        chem_formula=req_body.get('chem_formula', None),
-        cas_number=req_body.get('cas_number', None),
-        nature=req_body.get('nature', None),
-        ph_nature=req_body.get('ph_nature'),
-        quantity=req_body.get('quantity', None),
-        data_base=DB, user_name=USER, password=PASWRD, host=HOST)
-    return Response(f'REACTIVE {req_body["chem_id"]} HAS BEEN UPDATED', status=200)
+    request_body = request.get_json()
+    response_message, code_status = service_db.update_data(request_body)
+    return Response(response_message, status=code_status)
 
 
-@app.route('/chemDB/delete', methods=['DELETE'])
+@app.route('/reactive', methods=['DELETE'])
 def delete():
-    DB = credentials['data_base']
-    USER = credentials['user_name']
-    PASWRD = credentials['password']
-    HOST = credentials['host']
-
-    req_body = request.get_json()
-    pdb.delete_data(
-        chem_id=req_body.get('chem_id', None),
-        data_base=DB, user_name=USER, password=PASWRD, host=HOST)
-    return Response(f'REACTIVE {req_body["chem_id"]} HAS BEEN DELETED', status=200)
+    request_body = request.get_json()
+    response_message, code_status = service_db.delete_data(request_body)
+    return Response(response_message, status=code_status)
 
 
-@app.route('/chemDB/info', methods=['GET'])
+@app.route('/reactives', methods=['GET'])
 def query():
-    DB = credentials['data_base']
-    USER = credentials['user_name']
-    PASWRD = credentials['password']
-    HOST = credentials['host']
-
-    view = request.args.get('view')
-    column = request.args.get('where')
-    condition = request.args.get('equals')
-
-    data = pdb.view_data(
-        view_field=view, column=column, condition_value=condition,
-        data_base=DB, user_name=USER, password=PASWRD, host=HOST)
-
-    str_row = []
-    for row in data:
-        row = [str(i) for i in row]
-        string = ' | '.join(row)
-        str_row.append(string)
-    table = '\n'.join(str_row)
-
-    return Response(table, status=200)
+    response_message, code_status = service_db.search_data(request)
+    return Response(response_message, status=200)
 
 
 def run_app():

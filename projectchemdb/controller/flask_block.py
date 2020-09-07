@@ -2,7 +2,7 @@
 """
 
 from flask import Flask, request, Response
-from projectchemdb.service import service_postgres as service_db
+from projectchemdb.service import service_alchemy as service_db
 
 app = Flask(__name__)
 

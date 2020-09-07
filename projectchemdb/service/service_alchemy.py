@@ -27,12 +27,12 @@ def insert_data(request_body):
         reactive = alchemy.Reactive(
             chem_id=request_body.get('chem_id', None),
             name=request_body.get('name', None),
-            chem_formula=request_body.get('chem_formula', None),
+            chem_form=request_body.get('chem_formula', None),
             cas_number=request_body.get('cas_number', None),
             nature=request_body.get('nature', None),
             ph_nature=request_body.get('ph_nature'),
             quantity=request_body.get('quantity', None))
-        alchemy.insert_data(reactive, engine)
+        alchemy.insert_data(reactive, engine=engine)
         message = f'REACTIVE {request_body["chem_id"]} HAS BEEN INSERTED'
         code_status = 200
         return message, code_status
@@ -47,12 +47,12 @@ def update_data(request_body):
         reactive = alchemy.Reactive(
             chem_id=request_body.get('chem_id', None),
             name=request_body.get('name', None),
-            chem_formula=request_body.get('chem_formula', None),
+            chem_form=request_body.get('chem_formula', None),
             cas_number=request_body.get('cas_number', None),
             nature=request_body.get('nature', None),
             ph_nature=request_body.get('ph_nature'),
             quantity=request_body.get('quantity', None))
-        alchemy.update_data(request_body.get('chem_id', None), reactive, engine)
+        alchemy.update_data(request_body.get('chem_id', None), reactive, engine=engine)
         message = f'REACTIVE {request_body["chem_id"]} HAS BEEN UPDATED'
         code_status = 200
         return message, code_status
@@ -64,7 +64,7 @@ def update_data(request_body):
 
 def delete_data(request_body):
     try:
-        alchemy.delete_data(request_body.get('chem_id', None))
+        alchemy.delete_data(request_body.get('chem_id', None), engine=engine)
         message = f'REACTIVE {request_body["chem_id"]} HAS BEEN DELETED'
         code_status = 200
         return message, code_status
